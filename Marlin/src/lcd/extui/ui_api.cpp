@@ -384,8 +384,9 @@ namespace ExtUI {
   bool canMove(const extruder_t extruder) {
     return !thermalManager.tooColdToExtrude(extruder - E0);
   }
-
+  #if ENABLED(HOST_KEEPALIVE_FEATURE)
   GcodeSuite::MarlinBusyState getHostKeepaliveState() { return TERN0(HOST_KEEPALIVE_FEATURE, gcode.busy_state); }
+  #endif
   bool getHostKeepaliveIsPaused() { return TERN0(HOST_KEEPALIVE_FEATURE, gcode.host_keepalive_is_paused()); }
 
   #if HAS_SOFTWARE_ENDSTOPS
@@ -849,6 +850,13 @@ namespace ExtUI {
   #if HAS_BED_PROBE
     float getProbeOffset_mm(const axis_t axis) { return probe.offset.pos[axis]; }
     void setProbeOffset_mm(const_float_t val, const axis_t axis) { probe.offset.pos[axis] = val; }
+    void ProbeTare(void)
+    {
+      OUT_WRITE(AUTO_LEVEL_TX_PIN, LOW);
+      delay(300);
+      OUT_WRITE(AUTO_LEVEL_TX_PIN, HIGH);
+      delay(100);
+    }
   #endif
 
   #if ENABLED(BACKLASH_GCODE)
@@ -1087,6 +1095,14 @@ namespace ExtUI {
     char msg[strlen_P(pstr) + 1];
     strcpy_P(msg, pstr);
     onStatusChanged(msg);
+  }
+
+  void onSurviveInKilled()
+  {
+    thermalManager.killed = 0;
+    flags.printer_killed = 0;
+    marlin_state = MF_RUNNING;
+//    SERIAL_ECHOLNPAIR("survived at: ", millis());
   }
 
   FileList::FileList() { refresh(); }
