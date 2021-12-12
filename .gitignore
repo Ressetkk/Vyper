@@ -171,3 +171,8 @@ __pycache__
 # Simulation / Native
 eeprom.dat
 imgui.ini
+
+
+# Anycubic vyper related firmware files.
+firmware*.bin
+main_board*.bin
