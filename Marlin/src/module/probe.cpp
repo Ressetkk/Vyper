@@ -480,6 +480,12 @@ bool Probe::set_deployed(const bool deploy) {
 bool Probe::probe_down_to_z(const_float_t z, const_feedRate_t fr_mm_s) {
   DEBUG_SECTION(log_probe, "Probe::probe_down_to_z", DEBUGGING(LEVELING));
 
+  // TODO handle this case cleanly, possibly outside of this function
+  OUT_WRITE(AUTO_LEVEL_TX_PIN, LOW);
+  delay(300);
+  OUT_WRITE(AUTO_LEVEL_TX_PIN, HIGH);
+  delay(100);
+  
   #if BOTH(HAS_HEATED_BED, WAIT_FOR_BED_HEATER)
     thermalManager.wait_for_bed_heating();
   #endif
