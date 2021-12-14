@@ -171,3 +171,12 @@ __pycache__
 
 # IOLogger logs
 *_log.csv
+
+# Simulation / Native
+eeprom.dat
+imgui.ini
+
+
+# Anycubic vyper related firmware files.
+firmware*.bin
+main_board*.bin
