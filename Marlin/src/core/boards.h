@@ -355,7 +355,7 @@
 #define BOARD_ZONESTAR_ZM3E2          4055  // Zonestar ZM3E2    (STM32F103RCT6)
 #define BOARD_ZONESTAR_ZM3E4          4056  // Zonestar ZM3E4 V1 (STM32F103VCT6)
 #define BOARD_ZONESTAR_ZM3E4V2        4057  // Zonestar ZM3E4 V2 (STM32F103VCT6)
-#define BOARD_AC_TRI_F1_V1            4058  // Anycubic Trigorilla V1
+#define BOARD_AC_TRI_F1_V1            4058  // Anycubic Trigorilla V0.0.6 (STM32F103RET6)
 //
 // ARM Cortex-M4F
 //
