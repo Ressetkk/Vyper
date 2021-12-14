@@ -355,7 +355,7 @@ typedef struct { int16_t raw_min, raw_max; celsius_t mintemp, maxtemp; } temp_ra
 class Temperature {
 
   public:
-
+    volatile uint8_t killed;
     #if HAS_HOTEND
       static hotend_info_t temp_hotend[HOTENDS];
       static const celsius_t hotend_maxtemp[HOTENDS];
