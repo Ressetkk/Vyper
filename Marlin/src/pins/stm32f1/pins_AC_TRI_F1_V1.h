@@ -28,6 +28,7 @@
 
 #define BOARD_NO_NATIVE_USB
 
+#define DISABLE_DEBUG
 #define DISABLE_JTAG
 
 //
