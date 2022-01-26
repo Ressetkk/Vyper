@@ -704,7 +704,7 @@ namespace ExtUI {
     uint8_t getIDEX_Mode() { return dual_x_carriage_mode; }
   #endif
 
-  #if PREHEAT_COUNT
+  #if HAS_PREHEAT
     uint16_t getMaterial_preset_E(const uint16_t index) { return ui.material_preset[index].hotend_temp; }
     #if HAS_HEATED_BED
       uint16_t getMaterial_preset_B(const uint16_t index) { return ui.material_preset[index].bed_temp; }
@@ -924,7 +924,7 @@ namespace ExtUI {
   #endif // HAS_LEVELING
 
   #if ENABLED(HOST_PROMPT_SUPPORT)
-    void setHostResponse(const uint8_t response) { host_response_handler(response); }
+    void setHostResponse(const uint8_t response) { hostui.handle_response(response); }
   #endif
 
   #if ENABLED(PRINTCOUNTER)
@@ -1040,13 +1040,7 @@ namespace ExtUI {
 
   void setFeedrate_percent(const_float_t value) { feedrate_percentage = constrain(value, 10, 500); }
 
-  void coolDown() {
-    #if HAS_HOTEND
-      HOTEND_LOOP() thermalManager.setTargetHotend(0, e);
-    #endif
-    TERN_(HAS_HEATED_BED, thermalManager.setTargetBed(0));
-    TERN_(HAS_FAN, thermalManager.zero_fan_speeds());
-  }
+  void coolDown() { thermalManager.cooldown(); }
 
   bool awaitingUserConfirm() {
     return TERN0(HAS_RESUME_CONTINUE, wait_for_user) || getHostKeepaliveIsPaused();
@@ -1083,15 +1077,16 @@ namespace ExtUI {
   void resumePrint() { ui.resume_print(); }
   void stopPrint()   { ui.abort_print(); }
 
-  void onUserConfirmRequired_P(PGM_P const pstr) {
-    char msg[strlen_P(pstr) + 1];
-    strcpy_P(msg, pstr);
+  // Simplest approach is to make an SRAM copy
+  void onUserConfirmRequired(FSTR_P const fstr) {
+    char msg[strlen_P(FTOP(fstr)) + 1];
+    strcpy_P(msg, FTOP(fstr));
     onUserConfirmRequired(msg);
   }
 
-  void onStatusChanged_P(PGM_P const pstr) {
-    char msg[strlen_P(pstr) + 1];
-    strcpy_P(msg, pstr);
+  void onStatusChanged(FSTR_P const fstr) {
+    char msg[strlen_P(FTOP(fstr)) + 1];
+    strcpy_P(msg, FTOP(fstr));
     onStatusChanged(msg);
   }
 
@@ -1167,7 +1162,7 @@ void MarlinUI::init() { ExtUI::onStartup(); }
 
 void MarlinUI::update() { ExtUI::onIdle(); }
 
-void MarlinUI::kill_screen(PGM_P const error, PGM_P const component) {
+void MarlinUI::kill_screen(FSTR_P const error, FSTR_P const component) {
   using namespace ExtUI;
   if (!flags.printer_killed) {
     flags.printer_killed = true;
