@@ -33,7 +33,7 @@
 #include "../../../inc/MarlinConfigPre.h"
 #include "../ui_api.h"
 
-#define MAIN_BOARD_FIRMWARE_VER "2.0.9.2-ressetkk"
+#define MAIN_BOARD_FIRMWARE_VER "2.0.9.3-brafougne"
 
 
 /****************** PAGE INDEX***********************/
