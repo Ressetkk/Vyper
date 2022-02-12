@@ -43,8 +43,10 @@ namespace ExtUI {
 
   void onIdle() { Dgus.IdleLoop(); }
 
-  void onPrinterKilled(PGM_P const error, PGM_P const component) {
-    Dgus.PrinterKilled(error,component);
+  void onPrinterKilled(FSTR_P const error, FSTR_P const component) {
+
+    
+    Dgus.PrinterKilled(FTOP(error),FTOP(component));
   }
 
   void onMediaInserted() { Dgus.MediaEvent(AC_media_inserted); }
